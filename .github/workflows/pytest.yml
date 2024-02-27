@@ -1,4 +1,4 @@
-name: CARES Reinforcement Learning Testing
+name: Pyboy Environments Test
 run-name: ${{ github.actor }} is testing changes
 
 on:
