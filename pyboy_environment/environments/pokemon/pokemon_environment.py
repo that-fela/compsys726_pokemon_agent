@@ -6,6 +6,7 @@ from pyboy_environment.environments.environment import PyboyEnvironment
 
 from pyboy import WindowEvent
 
+
 class PokemonEnvironment(PyboyEnvironment):
     def __init__(
         self,
