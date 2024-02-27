@@ -1,23 +1,26 @@
 from typing import Dict, List
+import numpy as np
 
-from envrionments.pyboy.pokemon import pokemon_constants as pkc
-from envrionments.pyboy.pyboy_environment import PyboyEnvironment
+from pyboy_environment.environments.pokemon import pokemon_constants as pkc
+from pyboy_environment.environments.environment import PyboyEnvironment
+
 from pyboy import WindowEvent
-from util.configurations import GymEnvironmentConfig
-
 
 class PokemonEnvironment(PyboyEnvironment):
     def __init__(
         self,
-        task: str,
-        rom_path: str,
-        rom_name: str,
-        init_name: str,
         act_freq: int,
         emulation_speed: int = 0,
         headless: bool = False,
     ) -> None:
-        super().__init__(config, "PokemonRed.gb", "has_pokedex.state")
+        super().__init__(
+            task="pokemon",
+            rom_name="PokemonRed.gb",
+            init_name="has_pokedex.state",
+            act_freq=act_freq,
+            emulation_speed=emulation_speed,
+            headless=headless,
+        )
 
         self.valid_actions: List[WindowEvent] = [
             WindowEvent.PRESS_ARROW_DOWN,
