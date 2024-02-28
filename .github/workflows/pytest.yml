@@ -1,4 +1,4 @@
-name: CARES Reinforcement Learning Testing
+name: Pyboy Environments Test
 run-name: ${{ github.actor }} is testing changes
 
 on:
@@ -24,7 +24,6 @@ jobs:
       - name: Install deps
         run: |
           pip install -r requirements.txt
-          pip install --editable .
       
       - name: Run tests
         run: pytest tests
