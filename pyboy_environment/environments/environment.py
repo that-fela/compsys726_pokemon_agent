@@ -7,6 +7,8 @@ from pyboy import PyBoy
 
 
 class PyboyEnvironment:
+
+
     def __init__(
         self,
         task: str,
@@ -59,7 +61,9 @@ class PyboyEnvironment:
 
     @cached_property
     def observation_space(self) -> int:
-        return len(self._stats_to_state(self._generate_game_stats()))
+        return len(
+            self._stats_to_state(self._generate_game_stats()
+                                 ))
 
     @cached_property
     def action_num(self) -> int:
@@ -68,6 +72,8 @@ class PyboyEnvironment:
     def set_seed(self, seed: int) -> None:
         self.seed = seed
         # There isn't a random element to set that I am aware of...
+
+
 
     def reset(self) -> np.ndarray:
         # restart game, skipping credits and selecting first pokemon
@@ -173,14 +179,18 @@ class PyboyEnvironment:
         height = game_area_section[3]
 
         tilemap_background = self.pyboy.botsupport_manager().tilemap_background()
-        game_area = np.asarray(
-            tilemap_background[xx : xx + width, yy : yy + height], dtype=np.uint32
-        )
+        game_area = np.asarray(tilemap_background[xx : xx + width, yy : yy + height], dtype=np.uint32
+)
 
         ss = self._get_sprites()
         for s in ss:
             _x = (s.x // 8) - xx
+
             _y = (s.y // 8) - yy
+
+
+
+            
             if 0 <= _y < height and 0 <= _x < width:
                 game_area[_y][_x] = s.tile_identifier
 
