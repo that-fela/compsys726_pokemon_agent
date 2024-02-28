@@ -3,11 +3,12 @@ import cv2
 import numpy as np
 from scipy.spatial import distance as dist
 from detect import get_contour, draw_contour
-script_dir = os.path.dirname(__file__)
-    
 
-    # Dictionary to hold the loaded template images
-   
+script_dir = os.path.dirname(__file__)
+
+
+# Dictionary to hold the loaded template images
+
 image = cv2.imread(os.path.join(script_dir, "pokemon.png"))
 
 # # Assuming 'image' is your input image
@@ -49,14 +50,14 @@ from scipy.spatial import distance as dist
 for i, cnt in enumerate(contours):
     # Convert contour to a simple list of points
     contour_points = cnt.squeeze()
-    
+
     # Find the closest contour point to the center
     closest_point = min(contour_points, key=lambda x: dist.euclidean(x, center_point))
     closest_point = tuple(closest_point)
-    
+
     # Calculate the distance from the central point to this closest contour point
     distance_to_contour = dist.euclidean(center_point, closest_point)
-    
+
     print(f"Distance from center to edge of contour {i}: {distance_to_contour:.2f}")
 
     # Draw the closest point and a line to it for visualization

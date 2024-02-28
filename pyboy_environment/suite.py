@@ -1,4 +1,8 @@
-from pyboy_environment.environments import PyboyEnvironment, PokemonEnvironment, MarioEnvironment
+from pyboy_environment.environments import (
+    PyboyEnvironment,
+    PokemonEnvironment,
+    MarioEnvironment,
+)
 
 
 def make(

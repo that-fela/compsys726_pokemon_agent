@@ -215,18 +215,19 @@ DEF FIRST_INDOOR_MAP EQU const_value
 	map_const AGATHAS_ROOM,                   5,  6 ; $F7
 """
     hex_values_set = set()
-    lines = data.split('\n')
+    lines = data.split("\n")
     for line in lines:
-        if ';' in line:  # Check if line contains a hexadecimal value
-            hex_value = line.split(';')[-1].strip().lstrip('$')
+        if ";" in line:  # Check if line contains a hexadecimal value
+            hex_value = line.split(";")[-1].strip().lstrip("$")
             if hex_value:  # Ensure there's a value after stripping
                 int_value = int(hex_value, 16)  # Convert hex to int
                 hex_values_set.add(int_value)
     return hex_values_set
 
+
 def get_outside_id():
-    
-    data =  """const_def
+
+    data = """const_def
         map_const PALLET_TOWN,                   10,  9 ; $00
         map_const VIRIDIAN_CITY,                 20, 18 ; $01
         map_const PEWTER_CITY,                   20, 18 ; $02
@@ -238,15 +239,16 @@ def get_outside_id():
         map_const CINNABAR_ISLAND,               10,  9 ; $08
         map_const INDIGO_PLATEAU,                10,  9 ; $09
         map_const SAFFRON_CITY,                  20, 18 ; $0A"""
-    
+
     hex_values_set = set()
-    lines = data.split('\n')
+    lines = data.split("\n")
     for line in lines:
-        if ';' in line:  # Check if line contains a hexadecimal value
-            hex_value = line.split(';')[-1].strip().lstrip('$')
+        if ";" in line:  # Check if line contains a hexadecimal value
+            hex_value = line.split(";")[-1].strip().lstrip("$")
             if hex_value:  # Ensure there's a value after stripping
                 int_value = int(hex_value, 16)  # Convert hex to int
                 hex_values_set.add(int_value)
     return hex_values_set
+
 
 print(get_outside_id())
