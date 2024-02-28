@@ -27,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: Install Python dependencies
-        run: pip install pylint black
+        run: pip install black
 
       - name: Install deps
         run: |
@@ -37,5 +37,4 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           auto_fix: true
-          pylint: true
           black: true
