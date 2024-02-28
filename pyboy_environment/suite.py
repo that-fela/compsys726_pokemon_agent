@@ -13,7 +13,10 @@ def make(
 ) -> PyboyEnvironment:
 
     if task == "mario":
-        env = MarioEnvironment(act_freq, emulation_speed, headless)
+
+        env = MarioEnvironment(
+            act_freq, emulation_speed, headless
+            )
     elif task == "pokemon":
         env = PokemonEnvironment(act_freq, emulation_speed, headless)
     else:
