@@ -7,6 +7,7 @@ from pyboy import PyBoy
 
 
 class PyboyEnvironment:
+
     def __init__(
         self,
         task: str,
@@ -180,7 +181,9 @@ class PyboyEnvironment:
         ss = self._get_sprites()
         for s in ss:
             _x = (s.x // 8) - xx
+
             _y = (s.y // 8) - yy
+
             if 0 <= _y < height and 0 <= _x < width:
                 game_area[_y][_x] = s.tile_identifier
 
