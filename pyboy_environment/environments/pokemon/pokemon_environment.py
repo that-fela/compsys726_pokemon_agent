@@ -5,7 +5,6 @@ from pyboy_environment.environments.pokemon import pokemon_constants as pkc
 from pyboy_environment.environments.environment import PyboyEnvironment
 
 from pyboy import WindowEvent
-from .misc.extract import parse_constants_to_set, get_outside_id
 
 
 class PokemonEnvironment(PyboyEnvironment):
@@ -42,12 +41,17 @@ class PokemonEnvironment(PyboyEnvironment):
             WindowEvent.RELEASE_BUTTON_B,
         ]
 
+        """
+        TODO: Clean up this entire environment
+        Currently not in a working state I believe
+        """
+
         self.seen_locations = set()
         self.stuck_count = 0
         self.outside_count = 0
         self.inside_count = 0
-        self.inside_map_constants = parse_constants_to_set()
-        self.outside_map_constants = get_outside_id()
+        self.inside_map_constants = [] # These don't do anything
+        self.outside_map_constants = [] # THese don't do anything
         self.initial_positions = {}
         self.last_distance_travelled = 0
         self.buffer_frame = 0
