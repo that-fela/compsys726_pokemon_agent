@@ -50,8 +50,8 @@ class PokemonEnvironment(PyboyEnvironment):
         self.stuck_count = 0
         self.outside_count = 0
         self.inside_count = 0
-        self.inside_map_constants = [] # These don't do anything
-        self.outside_map_constants = [] # THese don't do anything
+        self.inside_map_constants = []  # These don't do anything
+        self.outside_map_constants = []  # THese don't do anything
         self.initial_positions = {}
         self.last_distance_travelled = 0
         self.buffer_frame = 0
