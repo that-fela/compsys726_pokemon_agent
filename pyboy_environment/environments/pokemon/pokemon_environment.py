@@ -41,9 +41,52 @@ class PokemonEnvironment(PyboyEnvironment):
             WindowEvent.RELEASE_BUTTON_B,
         ]
 
+        """
+        TODO: Clean up this entire environment
+        Currently not in a working state I believe
+        """
+
+        self.seen_locations = set()
+        self.stuck_count = 0
+        self.outside_count = 0
+        self.inside_count = 0
+        self.inside_map_constants = []  # These don't do anything
+        self.outside_map_constants = []  # THese don't do anything
+        self.initial_positions = {}
+        self.last_distance_travelled = 0
+        self.buffer_frame = 0
+
     def _stats_to_state(self, game_stats: Dict[str, any]) -> List[any]:
-        state: List[any] = []
-        return state
+        state = [
+            game_stats["location"]["x"],
+            game_stats["location"]["y"],
+            game_stats["location"]["map_id"],
+            # game_stats["party_size"],
+            # game_stats["ids"],
+            # game_stats["levels"],
+            # game_stats["type_id"],
+            # game_stats["xp"],
+            # game_stats["status"],
+            # game_stats["badges"],
+            # game_stats["caught_pokemon"],
+            # game_stats["seen_pokemon"],
+            # game_stats["money"],
+            # game_stats["hp"]["current"],
+            # game_stats["hp"]["max"],
+            # game_stats["events"],
+            game_stats["stucked"],
+            game_stats["outin"][0],
+            game_stats["outin"][1],
+        ]
+
+        # Generate the non-walkable matrix for the current location
+        obstacle_matrix = self._get_screen_walkable_matrix()
+
+        # Flatten the obstacle matrix and add it to the state
+        flattened_obstacle_matrix = obstacle_matrix.flatten().tolist()
+        state.extend(flattened_obstacle_matrix)
+
+        return np.array(state, dtype=np.float32)
 
     def _generate_game_stats(self) -> Dict[str, any]:
         return {
@@ -62,6 +105,8 @@ class PokemonEnvironment(PyboyEnvironment):
             "seen_pokemon": self._read_seen_pokemon_count(),
             "money": self._read_money(),
             "events": self._read_events(),
+            "outin": self.get_outside_inside(self._get_location()),
+            "stucked": self.get_if_stucked(self._get_location()),
         }
 
     def _reward_stats_to_reward(self, reward_stats: Dict[str, any]) -> int:
@@ -80,6 +125,11 @@ class PokemonEnvironment(PyboyEnvironment):
             "badges_reward": self._badges_reward(new_state),
             "money_reward": self._money_reward(new_state),
             "event_reward": self._event_reward(new_state),
+            "stuck_reward": self._stuck_reward(new_state),
+            "location_reward": self._location_reward(new_state),
+            "distance_reward": self._distance_travelled_reward(new_state),
+            "grass_reward": self._grass_reward(new_state),
+            "outside_reward": self._outside_reward(new_state),
         }
 
     def _caught_reward(self, new_state: Dict[str, any]) -> int:
@@ -108,6 +158,179 @@ class PokemonEnvironment(PyboyEnvironment):
     def _event_reward(self, new_state: Dict[str, any]) -> int:
         return sum(new_state["events"]) - sum(self.prior_game_stats["events"])
 
+    def _stuck_reward(self, new_state: Dict[str, any]) -> int:
+        """
+        Calculates the reward for being stuck in the game environment.
+
+        Args:
+            new_state (Dict[str, any]): The new state of the game environment.
+
+        Returns:
+            int: The reward value for being stuck. Returns -5 if the agent has been stuck for more than 10 steps, otherwise returns 0.
+        """
+        if new_state["location"] == self.prior_game_stats["location"]:
+            self.stuck_count += 1
+        else:
+            self.stuck_count = 0
+
+        if self.stuck_count >= 10:
+            self.stuck_count = 0
+            return -5
+        else:
+            return 0
+
+    def _location_reward(self, new_state: Dict[str, any]) -> int:
+        """
+        Calculates the reward based on the location of the agent in the game.
+
+        Args:
+            new_state (Dict[str, any]): The new state of the game.
+
+        Returns:
+            int: The reward based on the location.
+        """
+        # print(new_state["location"]["map_id"])
+        if new_state["location"]["map_id"] not in self.seen_locations:
+            self.seen_locations.add(new_state["location"]["map_id"])
+            return 50  # Increased reward for new locations
+        return 0
+
+    @staticmethod
+    def euclidean_distance(pos1, pos2):
+        return ((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2) ** 0.5
+
+    # new reward function
+    def _distance_travelled_reward(self, new_state: Dict[str, any]) -> int:
+        """
+        Calculates the reward based on the distance travelled in the game environment.
+
+        Args:
+            new_state (Dict[str, any]): The new state of the game environment.
+
+        Returns:
+            int: The reward based on the distance travelled.
+        """
+        map_id = new_state["location"]["map_id"]
+        current_position = (new_state["location"]["x"], new_state["location"]["y"])
+
+        while self.buffer_frame > 0:
+            self.buffer_frame -= 1
+            return 0
+
+        # if map id is different from previous map id
+        if self.prior_game_stats["location"]["map_id"] != map_id:
+            self.last_distance_travelled = 0
+            # delete the initial position of the previous map
+            try:
+                del self.initial_positions[self.prior_game_stats["location"]["map_id"]]
+            except:
+                pass
+            self.buffer_frame = 3
+            return 0
+
+        # Check if it's a new map or if we haven't recorded the initial position for this map yet
+        if map_id not in self.initial_positions:
+            self.initial_positions[map_id] = current_position
+            return 0  # No reward for the first step in a new map
+
+        # Calculate Euclidean distance from the initial position
+        initial_position = self.initial_positions[map_id]
+        distance = self.euclidean_distance(initial_position, current_position)
+
+        if (
+            distance <= self.last_distance_travelled
+            and self.prior_game_stats["location"]["map_id"] == map_id
+        ):
+            return 0
+
+        # if self.stuck_count >= 1:
+        #     return 0
+        # if self.get_if_stucked(self._get_location()) == 1:
+        #     return 0
+
+        # Optionally, reset the initial position to encourage exploration from the new point
+        # self.initial_positions[map_id] = current_position  # Uncomment to reset on each reward calculation
+
+        # Define the reward; for simplicity, the reward is just the distance moved
+        reward = distance
+        self.last_distance_travelled = distance
+
+        return reward
+
+    def _outside_reward(self, game_stats: Dict[str, any]) -> int:
+        """
+        Calculates the reward for being outside based on the tileset type.
+
+        Args:
+            game_stats (Dict[str, any]): The game statistics.
+
+        Returns:
+            int: The reward value. 2 for being outside, -2 for being indoors, 0 for other cases.
+        """
+        tileset_type = game_stats["location"]["map_id"]  # Read the tileset type
+        if (
+            tileset_type in self.outside_map_constants
+        ):  # Value 2 indicates outside with flower animation
+            self.outside_count += 1
+        else:
+            self.outside_count = 0
+
+        if tileset_type in self.inside_map_constants:  # Indoors
+            self.inside_count += 1
+        else:
+            self.inside_count = 0
+
+        if self.outside_count >= 10:
+            self.outside_count = 0
+            # print("outside")
+            return 2
+        elif self.inside_count >= 10:
+            self.inside_count = 0
+            # print("inside")
+            return -2
+
+        return 0  # No reward or penalty for other cases (e.g., caves)
+
+    def get_outside_inside(self, game_stats: Dict[str, any]) -> int:
+        """
+        Determines whether the player is currently outside or inside based on the map id.
+
+        Args:
+            game_stats (Dict[str, any]): The game statistics containing the map ID.
+
+        Returns:
+            int: A list representing whether the player is outside or inside. [1, 0] indicates outside, [0, 1] indicates inside.
+        """
+        tileset_type = game_stats["map_id"]  # Read the tileset type
+        try:
+            if (
+                tileset_type in self.outside_map_constants
+            ):  # Value 2 indicates outside with flower animation
+                return [1, 0]
+
+            if tileset_type in self.inside_map_constants:  # Indoors
+                return [0, 1]
+        except:
+            return [0, 1]
+        return [0, 1]
+
+    def get_if_stucked(self, game_stats: Dict[str, any]) -> int:
+        """
+        Checks if the game is stucked based on the current game stats.
+
+        Args:
+            game_stats (Dict[str, any]): The current game stats.
+
+        Returns:
+            int: Returns 1 if the game is stucked, otherwise returns 0.
+        """
+        try:
+            if game_stats == self.prior_game_stats["location"]:
+                return 1
+            return 0
+        except:
+            return 0
+
     def _check_if_done(self, game_stats: Dict[str, any]) -> bool:
         # Setting done to true if agent beats first gym (temporary)
         return self.prior_game_stats["badges"] > 0
@@ -129,6 +352,17 @@ class PokemonEnvironment(PyboyEnvironment):
 
     def _get_badge_count(self) -> int:
         return self._bit_count(self._read_m(0xD356))
+
+    def _is_grass_tile(self) -> bool:
+        grass_tile_index = self._read_m(0xD535)
+        player_sprite_status = self._read_m(0xC207)  # Assuming player is sprite 0
+        return player_sprite_status == 0x80
+
+    # in grass reward function that returns reward
+    def _grass_reward(self, new_state: Dict[str, any]) -> int:
+        if self._is_grass_tile():
+            return 19
+        return 0
 
     def _read_party_id(self) -> List[int]:
         # https://github.com/pret/pokered/blob/91dc3c9f9c8fd529bb6e8307b58b96efa0bec67e/constants/pokemon_constants.asm
