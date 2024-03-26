@@ -42,7 +42,8 @@ class PyboyEnvironment:
         self.prior_game_stats = self._generate_game_stats()
         self.screen = self.pyboy.screen
 
-        self.step_count = 0
+        self.steps = 0
+
         self.seed = 0
 
         self.pyboy.set_emulation_speed(emulation_speed)
@@ -54,8 +55,13 @@ class PyboyEnvironment:
         # There isn't a random element to set that I am aware of...
 
     def reset(self) -> np.ndarray:
+        self.steps = 0
+
         with open(self.init_path, "rb") as f:
             self.pyboy.load_state(f)
+
+        self.prior_game_stats = self._generate_game_stats()
+
         return self._get_state()
 
     def grab_frame(self, height=240, width=300) -> np.ndarray:
@@ -69,7 +75,7 @@ class PyboyEnvironment:
         return self.pyboy.game_area()
 
     def step(self, action) -> tuple:
-        self.step_count += 1
+        self.steps += 1
 
         self._run_action_on_emulator(action)
 
@@ -80,10 +86,9 @@ class PyboyEnvironment:
         reward = self._reward_stats_to_reward(reward_stats)
 
         done = self._check_if_done(current_game_stats)
+        truncated = self._check_if_truncated(current_game_stats)
 
         self.prior_game_stats = current_game_stats
-
-        truncated = self.step_count % 200 == 0
 
         return state, reward, done, truncated
 
@@ -122,6 +127,9 @@ class PyboyEnvironment:
         raise NotImplementedError("Override this method in the child class")
 
     def _check_if_done(self, game_stats: dict) -> bool:
+        raise NotImplementedError("Override this method in the child class")
+
+    def _check_if_truncated(self, game_stats: dict) -> bool:
         raise NotImplementedError("Override this method in the child class")
 
     def _read_m(self, addr: int) -> int:
