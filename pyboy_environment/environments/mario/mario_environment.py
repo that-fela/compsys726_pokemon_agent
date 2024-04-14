@@ -112,21 +112,22 @@ class MarioEnvironment(PyboyEnvironment):
     def _calculate_reward_stats(self, new_state: Dict[str, int]) -> Dict[str, int]:
         return {
             "position_reward": self._position_reward(new_state),
-            "dead_reward": self._dead_reward(new_state),
+            "lives_reward": self._lives_reward(new_state),
             "score_reward": self._score_reward(new_state),
         }
 
     def _position_reward(self, new_state: Dict[str, int]) -> int:
-        return new_state["x_position"] - self.prior_game_stats["x_position"]
+        delta_distance = new_state["x_position"] - self.prior_game_stats["x_position"]
+        return -1 if delta_distance == 0 else delta_distance
 
     def _dead_reward(self, new_state: Dict[str, int]) -> int:
-        return -10 if new_state["dead_timer"] > 0 else 0
+        return -100 if new_state["dead_timer"] > 0 else 0
 
     def _score_reward(self, new_state: Dict[str, int]) -> int:
         return new_state["score"] - self.prior_game_stats["score"]
 
     def _lives_reward(self, new_state: Dict[str, int]) -> int:
-        return new_state["lives"] - self.prior_game_stats["lives"]
+        return 10 * (new_state["lives"] - self.prior_game_stats["lives"])
 
     def _time_reward(self, new_state: Dict[str, int]) -> int:
         time_reward = min(0, (new_state["time"] - self.prior_game_stats["time"]) * 10)
@@ -154,7 +155,7 @@ class MarioEnvironment(PyboyEnvironment):
 
     def _check_if_truncated(self, game_stats):
         # Setting truncated to true if mario loses a life or N steps have been exceded
-        return self._get_dead_jump_timer() > 0 or self.steps > 1000
+        return self.steps > 2000 or self._get_game_over()
 
     def _get_lives(self):
         return self._read_m(0xDA15)
