@@ -90,10 +90,10 @@ This package provides the baseline code for the pyboy environments - you run the
 
 `train.py` takes in hyperparameters that allow you to customise the training run enviromment – OpenAI or DMCS Environment - or RL algorithm. Use `python3 train.py -h` for help on what parameters are available for customisation.
 
-An example is found below for running on the pyboy environments with TD3 through console
+An example is found below for running on an example of the openai environment with TD3 through console
 
 ```
-python3 train.py run --gym pyboy --task pokemon TD3
+python train.py run --gym openai --task HalfCheetah-v4 TD3
 ```
 
 ### Running Pokemon Task
