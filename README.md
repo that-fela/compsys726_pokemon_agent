@@ -11,15 +11,17 @@ Additional Details: https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red,_Blue,_and_Ye
 </p>
 
 ## Objective
-The objective of this assignment is to implement your version of the "pokemon_brock.py" task to enable a Reinforcement Learning (https://en.wikipedia.org/wiki/Reinforcement_learning) agent to learn to play the game of Pokemon Red from the original GameBoy. You are free to choose how you implement the environment, using any methodology or resources online that you wish.
+The objective of this assignment is to implement your version of the "brock.py" task to enable a Reinforcement Learning (https://en.wikipedia.org/wiki/Reinforcement_learning) agent to learn to play the game of Pokemon Red from the original GameBoy. You are free to choose how you implement the environment, using any methodology or resources online that you wish.
 
-The full game of Pokemon is ***immensely*** complicated to learn - this assignment will be limited to beating the first Pokemon Gym leader Brock. 
+The full game of Pokemon is ***immensely*** complicated to learn - this assignment will be limited to beating the first Pokemon Gym leader Brock. It should be noted that even beating Brock is a ***very difficult task***, and it is not expected that everyone (or anyone...) will achieve this goal. 
+
+The core objective is to consider what information is required from the agent, and to get hands on experience using machine learning to solve a complex task. Your exploraiton into solving this problem will provide key insights into the material - which you will demonstrate in the report by explaining how you approached solving this complex task with reinforcement learning and what you experienced along the way.  
+
+The full details of the assignment marking and expectations of the report are laid out on Canvas: TODO
 
 <p align="center">
     <img src="./media/pokemon-brock.jpeg" style="width: 60%;"/>
 </p>
-
-The full details of the assignment marking and expectations of the report are laid out on Canvas: TODO
 
 ## Setup
 Follow these steps carefully to pull the required libraries and packages to do this assignment. These instructions will default to using a folder called "~/compsys726" to manage the required packages but you may pull these packages into any directory you desire.
@@ -108,9 +110,7 @@ python3 train.py run --gym pyboy --domain pokemon --task brock TD3
 
 
 # Implementing your Pokemon Environment
-Your Pokemon Environment will be fully implemented in ***pyboy_environment/environments/pokemon/tasks/brock.py***. The goal is to determine a suitable state representation for an agent to learn from, a suitable set of actions, and a suitable reward function to enable the agent to learn to complete the task of beating the first gym leader Brock. It should be noted that this is a ***very difficult task***, and it is not expected that everyone (or anyone...) will achieve this goal entirely. 
-
-The core objective is to consider what information is required from the agent, and to get hands on experience using machine learning to solve a complex task. Your exploraiton into solving this problem will provide key insights into the material - which you will demonstrate in the report by explaining how you approached solving this complex task with reinforcement learning and what you experienced along the way. 
+Your Pokemon Environment will be fully implemented in ***pyboy_environment/environments/pokemon/tasks/brock.py***. The goal is to determine a suitable state representation for an agent to learn from, a suitable set of actions, and a suitable reward function to enable the agent to learn to complete the task of beating the first gym leader Brock. 
 
 ## Task Brock (brock.py)
 You are free to modify and expand the class inside of ***pyboy_environment/environments/pokemon/tasks/brock.py*** and add additional features/functions required to implement your environment. This is not best coding practice but it makes the lecturers lives easier.
