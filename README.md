@@ -93,6 +93,7 @@ This package provides the baseline code for the pyboy environments - you run the
 An example is found below for running on an example of the openai environment with TD3 through console
 
 ```
+cd ~/compsys726/gymnasium_envrionments/scripts
 python train.py run --gym openai --task HalfCheetah-v4 TD3
 ```
 
