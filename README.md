@@ -94,7 +94,7 @@ An example is found below for running on an example of the openai environment wi
 
 ```
 cd ~/compsys726/gymnasium_envrionments/scripts
-python train.py run --gym openai --task HalfCheetah-v4 TD3
+python train.py run --gym openai --task HalfCheetah-v4 TD3 --display 1
 ```
 
 ### Running Pokemon Task
