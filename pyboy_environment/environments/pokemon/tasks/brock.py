@@ -49,11 +49,12 @@ class PokemonBrock(PokemonEnvironment):
 
     def _get_state(self) -> np.ndarray:
         # Implement your state retrieval logic here
-        pass
+        game_stats = self._generate_game_stats()
+        return [game_stats["badges"]]
 
     def _calculate_reward(self, new_state: dict) -> float:
         # Implement your reward calculation logic here
-        return 0
+        return new_state["badges"] - self.prior_game_stats["badges"]
 
     def _check_if_done(self, game_stats: dict[str, any]) -> bool:
         # Setting done to true if agent beats first gym (temporary)
@@ -63,4 +64,4 @@ class PokemonBrock(PokemonEnvironment):
         # Implement your truncation check logic here
 
         # Maybe if we run out of pokeballs...? or a max step count
-        return self.steps > 1000
+        return self.steps >= 1000

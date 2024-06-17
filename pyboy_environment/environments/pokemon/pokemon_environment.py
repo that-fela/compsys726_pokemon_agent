@@ -59,11 +59,9 @@ class PokemonEnvironment(PyboyEnvironment):
             "Non-image based observation space not implemented - override this method to implement it"
         )
 
-    # TODO Implement discrete action space version of this
     def _run_action_on_emulator(self, action_array: np.ndarray) -> None:
-        # Implement your action execution logic here
-
         action = action_array[0]
+        action = min(action, 0.99)
 
         # Continuous Action is a float between 0 - 1 from Value based methods
         # We need to convert this to an action that the emulator can understand
