@@ -106,7 +106,7 @@ python3 train.py run --gym pyboy --domain pokemon --task brock TD3
 ```
 
 <p align="center">
-    <img src="./media/pokemon-video.gif" style="width: 40%;"/>
+    <img src="./media/pokemon-video.gif" style="width: 60%;"/>
 </p>
 
 ### Viewing Training Results
