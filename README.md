@@ -1,4 +1,4 @@
-# compsys726_pokemon_agent
+# Assignment Instructions
 Base code and templates for doing COMPSYS726 Assignment 2 Pokemon Reinforcement Learning tasks. This document provides all the instructions to setup and complete the assignment.
 
 ## Pokemon
