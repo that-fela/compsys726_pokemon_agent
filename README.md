@@ -106,8 +106,36 @@ python3 train.py run --gym pyboy --domain pokemon --task brock TD3
 ```
 
 <p align="center">
-    <img src="./media/pokemon.png" style="width: 40%;"/>
+    <img src="./media/pokemon-video.gif" style="width: 40%;"/>
 </p>
+
+### Viewing Training Results
+The results of training the agents is saved into this folder: ***~/cares_rl_logs/*** by default. The structure of the results is saved as below.
+
+The saved trained models contain the weights of your trained agent and will be uploaded as per the instructions below for the competition. 
+
+```
+├─ALGORITHM/ALGORITHM-TASK-YY_MM_DD:HH:MM:SS/
+├─ SEED
+|  ├─ env_config.py
+|  ├─ alg_config.py
+|  ├─ train_config.py
+|  ├─ data
+|  |  ├─ train.csv
+|  |  ├─ eval.csv
+|  ├─ figures
+|  |  ├─ eval.png
+|  |  ├─ train.png
+|  ├─ models
+|  |  ├─ model.pht
+|  |  ├─ CHECKPOINT_N.pht
+|  |  ├─ ...
+|  ├─ videos
+|  |  ├─ STEP.mp4
+|  |  ├─ ...
+├─ SEED...
+├─ ...
+```
 
 # Implementing your Pokemon Environment
 Your Pokemon Environment will be fully implemented in ***pyboy_environment/environments/pokemon/tasks/brock.py***. The goal is to determine a suitable state representation for an agent to learn from, a suitable set of actions, and a suitable reward function to enable the agent to learn to complete the task of beating the first gym leader Brock. 
