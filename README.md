@@ -109,7 +109,6 @@ python3 train.py run --gym pyboy --domain pokemon --task brock TD3
     <img src="./media/pokemon.png" style="width: 40%;"/>
 </p>
 
-
 # Implementing your Pokemon Environment
 Your Pokemon Environment will be fully implemented in ***pyboy_environment/environments/pokemon/tasks/brock.py***. The goal is to determine a suitable state representation for an agent to learn from, a suitable set of actions, and a suitable reward function to enable the agent to learn to complete the task of beating the first gym leader Brock. 
 
