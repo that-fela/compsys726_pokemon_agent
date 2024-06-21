@@ -62,7 +62,6 @@ cd ~/compsys726
 git clone https://github.com/UoA-CARES/gymnasium_envrionments.git 
 cd gymnasium_envrionments
 pip3 install -r requirements.txt
-pip3 install --editable .
 ```
 
 ### Download ROM
