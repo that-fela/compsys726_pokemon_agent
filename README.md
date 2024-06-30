@@ -29,7 +29,7 @@ Follow these steps carefully to pull the required libraries and packages to do t
 ### Install Required Packages
 This assignment requires three key packages to operate - you'll need to install them in a specific order as laid out below. 
 
-### 0: CUDA Acceleration (Nvidia GPU only)
+#### 0: CUDA Acceleration (Nvidia GPU only)
 If you want to utilise the GPU with Pytorch install CUDA first - https://developer.nvidia.com/cuda-toolkit
 
 #### 1: cares_reinforcement_learning
