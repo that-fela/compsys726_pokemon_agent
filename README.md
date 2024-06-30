@@ -27,7 +27,10 @@ The full details of the assignment marking and expectations of the report are la
 Follow these steps carefully to pull the required libraries and packages to do this assignment. These instructions will default to using a folder called "~/compsys726" to manage the required packages but you may pull these packages into any directory you desire.
 
 ### Install Required Packages
-This assignment requires three key packages to opreate - you must install them in a specific order as laid out below. 
+This assignment requires three key packages to operate - you'll need to install them in a specific order as laid out below. 
+
+### 0: CUDA Acceleration (Nvidia GPU only)
+If you want to utilise the GPU with Pytorch install CUDA first - https://developer.nvidia.com/cuda-toolkit
 
 #### 1: cares_reinforcement_learning
 The cares_reinforcement_learning package provides implementations of modern Reinforcement Learning algorithms and utlities for doing research. This package contains the reinforcement learning algorithms and implementations you can leverage to learn to play Pokemon. Further details can be explored here: https://github.com/UoA-CARES/cares_reinforcement_learning
