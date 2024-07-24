@@ -1,7 +1,5 @@
 from pyboy_environment.environments import PyboyEnvironment
 from pyboy_environment.environments.mario.mario_run import MarioRun
-from pyboy_environment.environments.pokemon.tasks.catch import PokemonCatch
-from pyboy_environment.environments.pokemon.tasks.fight import PokemonFight
 from pyboy_environment.environments.pokemon.tasks.brock import PokemonBrock
 
 
@@ -19,11 +17,7 @@ def make(
         else:
             raise ValueError(f"Unknown Mario task: {task}")
     elif domain == "pokemon":
-        if task == "catch":
-            env = PokemonCatch(act_freq, emulation_speed, headless)
-        elif task == "fight":
-            env = PokemonFight(act_freq, emulation_speed, headless)
-        elif task == "brock":
+        if task == "brock":
             env = PokemonBrock(act_freq, emulation_speed, headless)
         else:
             raise ValueError(f"Unknown Pokemon task: {task}")
