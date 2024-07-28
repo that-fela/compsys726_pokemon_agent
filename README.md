@@ -26,6 +26,8 @@ The full details of the assignment marking and expectations of the report are la
 ## Setup
 Follow these steps carefully to pull the required libraries and packages to do this assignment. These instructions will default to using a folder called "~/compsys726" to manage the required packages but you may pull these packages into any directory you desire.
 
+Please use **python3.10** for this assignment - this is the version we specifically use (**3.11** might work but no promises). We know this will **not work on python3.12** due to deprecated packages being removed. 
+
 ### Install Required Packages
 This assignment requires three key packages to operate - you'll need to install them in a specific order as laid out below. 
 
