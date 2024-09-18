@@ -47,6 +47,8 @@ class PokemonBrock(PokemonEnvironment):
             headless=headless,
         )
 
+        self.previous_reward = 0
+
     def _get_state(self) -> np.ndarray:
         # Implement your state retrieval logic here
         game_stats = self._generate_game_stats()
@@ -54,7 +56,27 @@ class PokemonBrock(PokemonEnvironment):
 
     def _calculate_reward(self, new_state: dict) -> float:
         # Implement your reward calculation logic here
-        return new_state["badges"] - self.prior_game_stats["badges"]
+
+        # ALL FAIL
+        # background = self._get_screen_background_tilemap()
+        # walkable = self._get_screen_walkable_matrix()
+        # collision = self.game_area_collision()
+        
+        cur_map = new_state["location"]["map"]
+        cur_x = int(new_state["location"]["x"])
+        cur_y = int(new_state["location"]["y"])
+        target_x = 0
+        target_y = 0
+
+        if cur_map == "OAKS_LAB,":
+            target_x = 4
+            target_y = 11
+        if cur_map == "PALLET_TOWN,":
+            target_x = 10
+            target_y = 0
+        
+        reward = 1 / (abs(cur_x - target_x) + abs(cur_y - target_y) + 1)
+        return reward
 
     def _check_if_done(self, game_stats: dict[str, any]) -> bool:
         # Setting done to true if agent beats first gym (temporary)
